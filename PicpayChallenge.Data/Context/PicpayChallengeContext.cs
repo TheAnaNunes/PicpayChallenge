@@ -16,7 +16,12 @@ public class PicpayChallengeContext: DbContext
         modelBuilder.Entity<User>()
             .HasOne(u => u.Wallet) 
             .WithOne(w => w.User) 
-            .HasForeignKey<Wallet>(w => w.UserId); 
+            .HasForeignKey<Wallet>(w => w.UserId);
+
+        modelBuilder.Entity<Wallet>()
+            .Property(w => w.Balance)
+            .HasColumnType("decimal(18,2)")
+            .IsRequired();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

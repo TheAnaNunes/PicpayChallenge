@@ -42,7 +42,7 @@ namespace PicpayChallenge.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("PicpayChallenge.Data.Entities.Wallet", b =>
@@ -64,7 +64,7 @@ namespace PicpayChallenge.Data.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Wallets");
+                    b.ToTable("Wallets", (string)null);
                 });
 
             modelBuilder.Entity("PicpayChallenge.Data.Entities.Wallet", b =>
