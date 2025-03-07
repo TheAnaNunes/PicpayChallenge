@@ -14,9 +14,10 @@ public class PicpayChallengeContext: DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>()
-            .HasOne(u => u.Wallet) 
-            .WithOne(w => w.User) 
-            .HasForeignKey<Wallet>(w => w.UserId);
+            .HasOne(u => u.Wallet)
+            .WithOne(w => w.User)
+            .HasForeignKey<Wallet>(w => w.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Wallet>()
             .Property(w => w.Balance)
