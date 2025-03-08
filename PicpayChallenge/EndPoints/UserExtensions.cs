@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PicpayChallenge.Data.Entities;
-using PicpayChallenge.Data.Repositories.Interfaces;
+using PicpayChallenge.Services.Services.Interface;
 
 namespace PicpayChallenge.EndPoints;
 
@@ -11,10 +11,10 @@ public static class UserExtensions
         var endpoints = app.MapGroup("/users").WithTags("User");
 
         endpoints.MapGet("/{id:long}", async (
-            [FromServices] IUserRepository repository,
+            [FromServices] IUserService service,
             long id) =>
         {
-            var user = await repository.GetByIdAsync(id);
+            var user = await service.GetUserIdAsync(id);
 
             return user is not null ?
                 Results.Ok(user) :
@@ -22,10 +22,10 @@ public static class UserExtensions
         });
 
         endpoints.MapPost("", async (
-            [FromServices] IUserRepository repository,
+            [FromServices] IUserService service,
             User user) =>
         {
-            await repository.CreateUserAsync(user);
+            await service.CreateUserAsync(user);
 
             Results.NoContent();
         });
