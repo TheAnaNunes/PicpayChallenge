@@ -12,7 +12,9 @@ public class WalletRepository(PicpayChallengeContext context) : IWalletRepositor
     private readonly PicpayChallengeContext _context = context;
 
     public async Task<Wallet?> GetByIdAsync(long id) =>
-        await _context.Wallets.FirstOrDefaultAsync(w => w.Id == id);
+        await _context.Wallets
+            .Include(w => w.User)
+            .FirstOrDefaultAsync(w => w.Id == id);
 
     public async Task UpdateBalanceAsync(UpdateBalanceWallet wallet)
     {

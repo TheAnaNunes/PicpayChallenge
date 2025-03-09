@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PicpayChallenge.Data.Models;
-using PicpayChallenge.Data.Repositories.Interfaces;
+using PicpayChallenge.Services.Services.Interface;
 
 namespace PicpayChallenge.EndPoints;
 
@@ -11,10 +11,10 @@ public static class WalletExtensions
         var endpoints = app.MapGroup("/wallets").WithTags("Wallet");
 
         endpoints.MapGet("/{id:long}", async (
-            [FromServices] IWalletRepository repository,
+            [FromServices] IWalletService service,
             long id) =>
         {
-            var wallet = await repository.GetByIdAsync(id);
+            var wallet = await service.GetByIdAsync(id);
 
             return wallet is not null 
                 ? Results.Ok(wallet) : 
@@ -22,10 +22,10 @@ public static class WalletExtensions
         });
 
         endpoints.MapPatch("/balance", async (
-            [FromServices] IWalletRepository repository,
+            [FromServices] IWalletService service,
             [FromBody] UpdateBalanceWallet wallet) =>
         {
-            await repository.UpdateBalanceAsync(wallet);
+            await service.UpdateBalanceAsync(wallet);
 
             return Results.NoContent();
         });

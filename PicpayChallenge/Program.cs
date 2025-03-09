@@ -13,7 +13,9 @@ builder.Services.AddDbContext<PicpayChallengeContext>(options =>
 
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();  
+
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IWalletService, WalletService>();
 
 var app = builder.Build();
 app.AddWalletEndPoints();
