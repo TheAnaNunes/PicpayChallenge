@@ -7,4 +7,5 @@ public interface IUserService
 {
     Task<UserModel?> GetUserIdAsync(long id);
     Task CreateUserAsync(User user);
+    Task DeleteByIdAsync(long id);
 }

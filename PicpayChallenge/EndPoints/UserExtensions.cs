@@ -29,5 +29,14 @@ public static class UserExtensions
 
             Results.NoContent();
         });
+
+        endpoints.MapDelete("/{id:long}", async (
+            [FromServices] IUserService service,
+            long id) =>
+        {
+            await service.DeleteByIdAsync(id);
+
+            Results.NoContent();
+        });
     }
 }

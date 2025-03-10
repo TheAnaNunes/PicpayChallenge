@@ -16,6 +16,16 @@ public class UserService(IUserRepository repository) : IUserService
            await repository.CreateUserAsync(user);
     }
 
+    public async Task DeleteByIdAsync(long id)
+    {
+        var user = await repository.GetByIdAsync(id);
+
+        if (user is not null)
+            await repository.DeleteByUserAsync(user);
+        else
+            throw new KeyNotFoundException("User not found");
+    }
+
     public async Task<UserModel?> GetUserIdAsync(long id)
     {
         var user = await repository.GetByIdAsync(id);

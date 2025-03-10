@@ -19,6 +19,14 @@ public class PicpayChallengeContext: DbContext
             .HasForeignKey<Wallet>(w => w.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.Document)
+            .IsUnique();
+
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
+
         modelBuilder.Entity<Wallet>()
             .Property(w => w.Balance)
             .HasColumnType("decimal(18,2)")
