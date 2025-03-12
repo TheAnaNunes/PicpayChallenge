@@ -33,7 +33,7 @@ public class ExceptionHandlingMiddleware(RequestDelegate next)
             _ => StatusCodes.Status500InternalServerError
         };
 
-        var response = ErroResponse.Fail(ex.Message, context.Response.StatusCode);
+        var response = ErroResponse.Fail(ex.Message);
 
         return context.Response.WriteAsJsonAsync(response);
     }

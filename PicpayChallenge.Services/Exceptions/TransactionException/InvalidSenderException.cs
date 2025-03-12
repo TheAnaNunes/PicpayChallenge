@@ -3,7 +3,7 @@ namespace PicpayChallenge.Services.Exceptions.TransactionException;
 
 public class InvalidSenderException : PicpayException
 {
-    private const string _defaultMessage = "Invalid Sender, just common users can made transactions";
+    private const string _defaultMessage = "Invalid Sender, Shopkeepers users can't made transactions";
     
     public InvalidSenderException()
         : base(_defaultMessage) { }

@@ -1,20 +1,15 @@
 ﻿
 namespace PicpayChallenge.Middleware.Response;
 
-public record ErroResponse(string Message, int? StatusCode)
+public record ErroResponse(string Message)
 {
-    public static ErroResponse Fail(string message, int? statusCode)
+    public static ErroResponse Fail(string message)
     {
         if (string.IsNullOrEmpty(message))
         {
             throw new ArgumentException($"'{nameof(message)}' cannot be null or empty.", nameof(message));
         }
 
-        if (statusCode is null)
-        {
-            throw new ArgumentNullException(nameof(statusCode));
-        }
-
-        return new(message, statusCode);
+        return new(message);
     }
 }
