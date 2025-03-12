@@ -38,12 +38,35 @@ public class TransactionService(
 
         await transactionRepository
             .SendTransactionAsync(userSender.Id, userReceiver.Id, transactionAmount);
+
+
+        for (int i = 0; i < 3; i++)
+        {
+            try
+            {
+                var response = await SendNotificationAsync();
+
+                if (response is null || !response.IsSuccessStatusCode)
+                    throw new FailedNotificationException();
+
+                return;
+            }
+            catch (Exception)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(2));
+
+                continue;
+            }
+        }
     }
 
     public async Task<HttpResponseMessage?> GetAuthUserAsync()
     {
-        var urlGet = $"https://util.devi.tools/api/v2/authorize";
+        return await httpClient.GetAsync("https://util.devi.tools/api/v2/authorize");
+    }
 
-        return await httpClient.GetAsync(urlGet);
+    public async Task<HttpResponseMessage?> SendNotificationAsync()
+    {
+        return await httpClient.PostAsync("https://util.devi.tools/api/v1/notify", null);
     }
 }
