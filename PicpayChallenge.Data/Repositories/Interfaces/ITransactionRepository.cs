@@ -4,5 +4,5 @@ namespace PicpayChallenge.Data.Repositories.Interfaces;
 
 public interface ITransactionRepository
 {
-    Task SendTransactionAsync(User sender, User receiver, double transactionAmount);
+    Task SendTransactionAsync(long idSender, long idReceiver, double transactionAmount);
 }

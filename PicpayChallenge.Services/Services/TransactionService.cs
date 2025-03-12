@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.IdentityModel.Tokens;
-using PicpayChallenge.Data.Repositories.Interfaces;
+﻿using PicpayChallenge.Data.Repositories.Interfaces;
 using PicpayChallenge.Services.Exceptions.TransactionException;
 using PicpayChallenge.Services.Services.Interface;
 
@@ -21,12 +19,7 @@ public class TransactionService(
         var userSender = await userRepository.GetByIdAsync(idSender) 
             ?? throw new InvalidUserException("Sender User not found!");
 
-        var url = $"https://util.devi.tools/api/v2/authorize";
-
-        var statusCode = await GetAuthUserAsync(url);
-
-        if (statusCode is null || !statusCode.IsSuccessStatusCode)
-            throw new FailedAuthenticationException();
+        var statusCode = await GetAuthUserAsync();
 
         if (userSender.Document.Length != 11)
             throw new InvalidSenderException();
@@ -40,14 +33,17 @@ public class TransactionService(
         if (userSender.Equals(userReceiver))
             throw new InvalidUserException();
 
+        if (statusCode is null || !statusCode.IsSuccessStatusCode)
+            throw new FailedAuthenticationException();
+
         await transactionRepository
-            .SendTransactionAsync(userSender, userReceiver, transactionAmount);
+            .SendTransactionAsync(userSender.Id, userReceiver.Id, transactionAmount);
     }
 
-    public async Task<HttpResponseMessage?> GetAuthUserAsync(string url)
+    public async Task<HttpResponseMessage?> GetAuthUserAsync()
     {
-        var response = await httpClient.GetAsync(url);
+        var urlGet = $"https://util.devi.tools/api/v2/authorize";
 
-        return response;
+        return await httpClient.GetAsync(urlGet);
     }
 }

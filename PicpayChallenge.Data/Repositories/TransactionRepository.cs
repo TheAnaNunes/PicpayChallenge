@@ -1,5 +1,5 @@
-﻿using PicpayChallenge.Data.Context;
-using PicpayChallenge.Data.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using PicpayChallenge.Data.Context;
 using PicpayChallenge.Data.Repositories.Interfaces;
 
 namespace PicpayChallenge.Data.Repositories;
@@ -7,13 +7,31 @@ namespace PicpayChallenge.Data.Repositories;
 public class TransactionRepository(PicpayChallengeContext context) : ITransactionRepository
 {
     public async Task SendTransactionAsync(
-        User sender,
-        User receiver,
+        long idSender,
+        long idReceiver,
         double transactionAmount)
     {
-        sender.Wallet.Balance -= transactionAmount;
-        receiver.Wallet.Balance += transactionAmount;
+        var transaction = await context.Database.BeginTransactionAsync();
 
-        await context.SaveChangesAsync();
+        try
+        {
+            await context.Wallets
+                .Where(w => w.UserId == idSender)
+                .ExecuteUpdateAsync(setter => 
+                    setter.SetProperty(w => w.Balance, w => w.Balance - transactionAmount));
+
+            await context.Wallets
+                .Where(w => w.UserId == idReceiver)
+                .ExecuteUpdateAsync(setter => 
+                    setter.SetProperty(w => w.Balance, w => w.Balance + transactionAmount));
+
+            await transaction.CommitAsync();
+        }
+        catch (Exception)
+        {
+            await transaction.RollbackAsync();
+
+            throw;
+        }
     }
 }
