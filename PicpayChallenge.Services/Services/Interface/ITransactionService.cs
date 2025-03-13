@@ -3,5 +3,4 @@
 public interface ITransactionService
 {
     Task SendTransactionAsync(long idSender, long idReceiver, double transactionAmount);
-    Task<HttpResponseMessage?> GetAuthUserAsync();
 }
